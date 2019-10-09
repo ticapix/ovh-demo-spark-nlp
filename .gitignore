@@ -1,2 +1,4 @@
-credentials.sh
+config.sh
 */venv3
+spark*
+sbt*

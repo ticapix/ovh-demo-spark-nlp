@@ -1,9 +1,13 @@
 #!/bin/sh
 
-#export PATH=`pwd`/spark-2.4.4-bin-hadoop3.2/bin:$PATH
-#export PATH=`pwd`/sbt/bin:$PATH
-#export PATH=`pwd`/:$PATH
-#export SPARK_SCALA_VERSION=2.11
+export SPARK_VERSION=2.4.4
+export SBT_VERSION=1.3.2
+
+export PATH=`pwd`/sbt/bin:$PATH
+export PATH=`pwd`/spark/bin:$PATH
+export PATH=`pwd`/:$PATH
+
+export TERM=xterm-color # fix warnings in spark-shell
 
 # OpenStack credential
 export OS_AUTH_URL=https://auth.cloud.ovh.net/v2.0/

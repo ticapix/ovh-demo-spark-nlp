@@ -2,7 +2,9 @@
 
 # Setup your VM
 
+```shell
 sudo apt-get install --yes python3-venv unzip jq
+```
 
 # Install Java-8 on Debian 10
 
@@ -47,9 +49,18 @@ You need:
 - an OVH Logs WRITE token
 - an OVH Logs token
 
+Create a file `credentials.sh` based on the template `credentials_editme.sh` and source it `. ./credentials.sh`
+
+# Compile spark
+
+We are going to compile spark for Hadoop 3.2
+
+```shell
+make spark
+```
+
 # Start the cluster
 
-Edit the 
-
-cd cluster
-
+```shell
+make -C cluster cluster-create
+```

@@ -85,13 +85,12 @@
     unarchive:
       src: '{{ spark_package }}'
       dest: "{{ home }}"
-      remote_src: yes
     when: spark_dirs.files | length  == 0
 
   - name: Find spark path
     find:
       paths: "{{ home }}"
-      patterns: spark-*-bin-hadoop*
+      patterns: spark-*-bin-*
       file_type: directory
     register: spark_dirs
 

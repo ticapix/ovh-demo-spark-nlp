@@ -1,5 +1,4 @@
-# from https://spark.apache.org/downloads.html
-spark_package: http://apache.mirrors.ovh.net/ftp.apache.org/dist/spark/spark-2.4.4/spark-2.4.4-bin-hadoop2.7.tgz
+spark_package: "../spark-{{ lookup('env', 'SPARK_VERSION') }}-bin-standalone.tgz"
 
 # from https://nlp.johnsnowlabs.com/docs/en/models
 pos_model_url: https://s3.amazonaws.com/auxdata.johnsnowlabs.com/public/models/pos_anc_en_2.0.2_2.4_1556659930154.zip
