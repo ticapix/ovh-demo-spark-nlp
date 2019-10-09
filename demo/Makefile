@@ -45,12 +45,14 @@ _run-local:
 
 #		--files pos_anc_en_2.0.2_2.4_1556659930154.zip,lemma_antbnc_en_2.0.2_2.4_1556480454569.zip \
 
+XML_DUMP=swift://wiki.OVH/enwiki-20190801-pages-articles-multistream2.xml-p30304p88444
+#XML_DUMP=swift://wiki.OVH/enwiki-20190801-pages-articles-multistream-500MB.xml
 
 _run:
 	$(MAKE) -C ../cluster start-mon
 	$(TIMEIT) $(SPARK_SUBMIT) \
 	    --master spark://$(SPARK_MASTER):7077 \
-	    --class $(CLASS) $(ASSEMBLY) swift://wiki.OVH/enwiki-20190801-pages-articles-multistream-500MB.xml || true
+	    --class $(CLASS) $(ASSEMBLY) $(XML_DUMP) || true
 	$(MAKE) -C ../cluster stop-mon
 #	    --executor-cores $(NUM_CORE_PER_WORKER) --total-executor-cores $$(( $(NUM_CORE_PER_WORKER) * $(NUM_WORKER))) \
 

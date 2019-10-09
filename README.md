@@ -3,7 +3,7 @@
 # Setup your VM
 
 ```shell
-sudo apt-get install --yes python3-venv unzip jq python-openstackclient python-swiftclient
+sudo apt-get install --yes python3-venv unzip jq time python-openstackclient python-swiftclient
 ```
 
 # Install Java-8 on Debian 10
@@ -69,4 +69,20 @@ make -C cluster cluster-create
 
 ```shell
 make -C demo assembly
+```
+
+# TODO
+
+Upload the wikipedia dump in a swift container
+
+# Compute the XML schema
+
+```shell
+make -C demo compute-schema-local 
+```
+
+# Count the verbs
+
+```shell
+make -C demo demo
 ```

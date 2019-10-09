@@ -110,6 +110,27 @@
       url: "{{ gelf_package }}"
       dest: "{{ home }}/spark/jars/"
 
+  - name: Create model directories
+    file:
+      path: "{{ item }}"
+      state: directory
+      mode: '0755'
+    loop:
+      - "/tmp/pos_model"
+      - "/tmp/lemma_model"
+
+  - name: Extract {{ pos_model_url }} model
+    unarchive:
+      src: '{{ pos_model_url }}'
+      dest: "/tmp/pos_model"
+      remote_src: yes
+
+  - name: Extract {{ lemma_model_url }} model
+    unarchive:
+      src: '{{ lemma_model_url }}'
+      dest: "/tmp/lemma_model"
+      remote_src: yes
+
 - name: Configure master
   hosts: master
   gather_facts: no
@@ -136,7 +157,7 @@
     environment:
       SPARK_MASTER_HOST: "{{ hostvars['localhost'].inventory.master.value }}"
 
-- name: Configure workers
+- name: Configure localhost
   hosts: localhost
   gather_facts: no
   tasks:
