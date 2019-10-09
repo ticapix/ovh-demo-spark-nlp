@@ -3,7 +3,7 @@
 # Setup your VM
 
 ```shell
-sudo apt-get install --yes python3-venv unzip jq
+sudo apt-get install --yes python3-venv unzip jq python-openstackclient python-swiftclient
 ```
 
 # Install Java-8 on Debian 10
@@ -49,7 +49,7 @@ You need:
 - an OVH Logs WRITE token
 - an OVH Logs token
 
-Create a file `credentials.sh` based on the template `credentials_editme.sh` and source it `. ./credentials.sh`
+Create a file `config.sh` based on the template `config.sh.sample` and source it `. ./config.sh`
 
 # Compile spark
 
@@ -63,4 +63,10 @@ make spark
 
 ```shell
 make -C cluster cluster-create
+```
+
+# Compile the Spark job
+
+```shell
+make -C demo assembly
 ```
