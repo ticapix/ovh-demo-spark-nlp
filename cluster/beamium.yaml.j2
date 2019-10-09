@@ -1,0 +1,21 @@
+# noderig endpoint to fetch
+scrapers:
+  noderig:
+    url: http://127.0.0.1:9100/metrics
+    format: sensision
+    period: 1000 # 1sec
+
+# Warp10 platform to send data
+sinks:
+  metrics:
+    url: https://warp10.gra1.metrics.ovh.net/api/v0/update
+    token: {{ write_token }}
+
+labels:
+  host: {{ ansible_hostname }}
+
+parameters:
+  source-dir: /opt/beamium/sources
+  sink-dir: /opt/beamium/sinks
+  log-level: 1
+  log-file: /var/log/beamium/beamium.log

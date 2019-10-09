@@ -1,0 +1,16 @@
+# from https://spark.apache.org/downloads.html
+spark_package: http://apache.mirrors.ovh.net/ftp.apache.org/dist/spark/spark-2.4.4/spark-2.4.4-bin-hadoop2.7.tgz
+
+# from https://nlp.johnsnowlabs.com/docs/en/models
+pos_model_url: https://s3.amazonaws.com/auxdata.johnsnowlabs.com/public/models/pos_anc_en_2.0.2_2.4_1556659930154.zip
+lemma_model_url: https://s3.amazonaws.com/auxdata.johnsnowlabs.com/public/models/lemma_antbnc_en_2.0.2_2.4_1556480454569.zip
+
+# from https://mvnrepository.com/artifact/biz.paluch.logging/logstash-gelf
+gelf_package: https://repo1.maven.org/maven2/biz/paluch/logging/logstash-gelf/1.13.0/logstash-gelf-1.13.0.jar
+
+# the OVH Metrics WRITE token
+write_token: "{{ lookup('env','METRICS_WRITE_TOKEN') }}"
+# the OVH Logs Write token
+ldp_token: "{{ lookup('env','LDP_WRITE_TOKEN') }}"
+
+log4j_level: INFO # default to INFO

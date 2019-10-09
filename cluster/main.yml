@@ -1,0 +1,174 @@
+- import_playbook: inventory.yml
+
+- name: setup host
+  hosts: all
+  gather_facts: no
+  tasks:
+  - name: Wait 300 seconds
+    wait_for_connection:
+      timeout: 300
+
+
+- name: setup host
+  hosts: all
+  become: true
+  strategy: free
+  tasks:
+
+  - name: Add OVH Metrics apt signing key
+    apt_key:
+      url: http://last.public.ovh.metrics.snap.mirrors.ovh.net/pub.key
+      state: present
+
+  - name: Add OVH Metrics repository
+    apt_repository:
+      repo: deb [trusted=yes] http://last.public.ovh.metrics.snap.mirrors.ovh.net/ubuntu {{ ansible_lsb.codename }} main
+      state: present
+
+  - name: Update apt packages
+    apt:
+      update_cache: yes
+
+  - name: Install dependencies
+    package:
+      name: '{{ item }}'
+      state: present
+    with_items:
+      - openjdk-8-jre-headless
+      - beamium
+      - noderig
+      - unzip
+
+  - name: Generate beamium config
+    template:
+      src: "{{ playbook_dir }}/beamium.yaml.j2"
+      dest: /etc/beamium/config.yaml
+
+  - name: Generate noderig config
+    template:
+      src: "{{ playbook_dir }}/noderig.yaml.j2"
+      dest: /etc/noderig/config.yaml
+
+  - name: Start service noderig
+    service:
+      name: noderig
+      state: restarted
+
+  - name: Start service beamium
+    service:
+      name: beamium
+      state: restarted
+
+
+- name: deploy cluster
+  hosts: all
+  gather_facts: no
+  strategy: free
+  tasks:
+  - set_fact:
+      home: "/home/{{ hostvars['localhost'].inventory.username.value }}"
+
+  - name: Set authorized keys taken from url
+    authorized_key:
+      user: spark
+      state: present
+      key: "{{ lookup('file', '/tmp/spark-key.pub') }}"
+
+  - name: Find if spark is already installed
+    find:
+      paths: "{{ home }}"
+      patterns: spark-*-bin-hadoop*
+      file_type: directory
+    register: spark_dirs
+
+  - name: Extract {{ spark_package }} archive
+    unarchive:
+      src: '{{ spark_package }}'
+      dest: "{{ home }}"
+      remote_src: yes
+    when: spark_dirs.files | length  == 0
+
+  - name: Find spark path
+    find:
+      paths: "{{ home }}"
+      patterns: spark-*-bin-hadoop*
+      file_type: directory
+    register: spark_dirs
+
+  - name: Create symlink
+    file:
+      src: '{{ spark_dirs.files[0].path }}'
+      dest: "{{ home }}/spark"
+      state: link
+
+  - name: Generate log4j config
+    template:
+      src: "{{ playbook_dir }}/log4j.properties.j2"
+      dest: "{{ home }}/spark/conf/log4j.properties"
+
+  - name: Fetch Gelf lib for logging
+    get_url:
+      url: "{{ gelf_package }}"
+      dest: "{{ home }}/spark/jars/"
+
+- name: Configure master
+  hosts: master
+  gather_facts: no
+  tasks:
+  - set_fact:
+      home: "/home/{{ hostvars['localhost'].inventory.username.value }}"
+
+  - name: Copy private key
+    copy:
+      src: /tmp/spark-key.pem
+      dest: "{{ home }}/.ssh/id_rsa"
+      mode: '0600'
+
+  - name: Generate worker config file
+    template:
+      src: "{{ playbook_dir }}/spark-slaves.j2"
+      dest: "{{ home }}/spark/conf/slaves"
+
+  - name: Stop all
+    command: "{{ home }}/spark/sbin/stop-all.sh"
+
+  - name: Start all
+    command: "{{ home }}/spark/sbin/start-all.sh"
+    environment:
+      SPARK_MASTER_HOST: "{{ hostvars['localhost'].inventory.master.value }}"
+
+- name: Configure workers
+  hosts: localhost
+  gather_facts: no
+  tasks:
+
+  - name: Generate log4j config
+    template:
+      src: "{{ playbook_dir }}/log4j.properties.j2"
+      dest: "/tmp/log4j.properties"
+
+  - name: Fetch Gelf lib for logging
+    get_url:
+      url: "{{ gelf_package }}"
+      dest: "/tmp/"
+
+  - name: Create model directories
+    file:
+      path: "{{ item }}"
+      state: directory
+      mode: '0755'
+    loop:
+      - "/tmp/pos_model"
+      - "/tmp/lemma_model"
+
+  - name: Extract {{ pos_model_url }} model
+    unarchive:
+      src: '{{ pos_model_url }}'
+      dest: "/tmp/pos_model"
+      remote_src: yes
+
+  - name: Extract {{ lemma_model_url }} model
+    unarchive:
+      src: '{{ lemma_model_url }}'
+      dest: "/tmp/lemma_model"
+      remote_src: yes

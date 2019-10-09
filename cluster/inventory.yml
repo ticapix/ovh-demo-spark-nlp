@@ -1,0 +1,58 @@
+- name: Configure inventory
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: gather facts from terraform
+    command: terraform output -json
+    register: facts
+
+  - set_fact:
+      inventory: "{{ facts.stdout | from_json }}"
+
+  - name: save private key to disk
+    copy:
+      content: "{{ inventory.key.value.private }}"
+      dest: /tmp/spark-key.pem
+      mode: 0600
+
+  - name: save public key to disk
+    copy:
+      content: "{{ inventory.key.value.public }}"
+      dest: /tmp/spark-key.pub
+      mode: 0600
+
+
+  - name: remove previous key from known host file
+    command: ssh-keygen -f "{{ lookup('env','HOME') }}/.ssh/known_hosts" -R "{{ item }}"
+    loop: "{{ inventory.workers.value + [inventory.master.value] }}"
+
+  - name: add master node to inventory
+    add_host:
+      name: "master-1"
+      groups:
+        - master
+      ansible_connection: ssh
+      ansible_host: '{{ inventory.master.value }}'
+      ansible_user: spark
+      ansible_ssh_private_key_file: /tmp/spark-key.pem
+      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+
+  - name: add cluster workers to inventory
+    add_host:
+      name: "worker-{{ ansible_loop.index }}"
+      groups:
+        - workers
+      ansible_connection: ssh
+      ansible_host: "{{ item }}"
+      ansible_user: spark
+      ansible_ssh_private_key_file: /tmp/spark-key.pem
+      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+    loop: "{{ inventory.workers.value }}"
+    loop_control:
+      extended: yes
+
+  - name: show all the hosts in inventory
+    debug:
+      msg: "{{ item }}"
+    loop: "{{ groups['all'] }}"
