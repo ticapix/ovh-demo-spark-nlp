@@ -8,7 +8,7 @@ variable "keypair" {
 }
 
 variable "worker_num" {
-  default = 1
+  default = 10
 }
 
 variable "flavor" {

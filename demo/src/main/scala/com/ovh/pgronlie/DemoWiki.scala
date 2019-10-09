@@ -99,10 +99,6 @@ object DemoWiki {
     printf("Reading data from %s\n", wiki_pages_xml);
 
     val (sc, conf) = Util.createSpark()
-    //    pos_model_path = extractSparkResource("pos_anc_en_2.0.2_2.4_1556659930154.zip")
-    //    lemma_model_path = extractSparkResource("lemma_antbnc_en_2.0.2_2.4_1556480454569.zip")
-    //    pos_model_path = extractSparkResource("http://51.68.112.231:8080/pos_anc_en_2.0.2_2.4_1556659930154.zip")
-    //    lemma_model_path = extractSparkResource("http://51.68.112.231:8080/lemma_antbnc_en_2.0.2_2.4_1556480454569.zip")
     pos_model_path = Paths.get("/tmp/pos_model/")
     lemma_model_path = Paths.get("/tmp/lemma_model/")
     val df = fromxml(sc, wiki_pages_xml, wiki_schema)
@@ -115,8 +111,13 @@ object DemoWiki {
     {
       val start = Util.timeStart()
       val verbs = extractVerb32(sc, df)
-      verbs.limit(500).write.mode("overwrite").parquet(wiki_verbs)
+      verbs.limit(1000).write.mode("overwrite").parquet(wiki_verbs)
       printf("[32] Took %s to process\n", Util.timeStop(start))
+    }
+    {
+      printf("List of verbs\n")
+      val verbs = sc.read.parquet(wiki_verbs)
+      verbs.show(100)
     }
     println("done")
   }
