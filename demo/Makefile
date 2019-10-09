@@ -21,8 +21,8 @@ deps:
 #	swift post -r '.r:*,.rlistings' wiki
 
 assembly: deps
-	eval "echo \"`cat $(ROOT_DIR)/application.properties`\"" > $(ROOT_DIR)/src/resources/application.properties
-	$(SBT) clean assembly | tee assembly.log
+	eval "echo \"`cat $(ROOT_DIR)/application.properties`\"" > $(ROOT_DIR)/src/main/resources/application.properties
+	JAVA_OPTS='-Xmx2048m' $(SBT) assembly | tee assembly.log
 
 hello-world: ## Hello World (setup check)
 	$(MAKE) CLASS=com.ovh.pgronlie.HelloWorld _run
