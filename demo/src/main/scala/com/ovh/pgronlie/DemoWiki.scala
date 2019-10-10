@@ -36,7 +36,7 @@ object DemoWiki {
       .filter(length(col("token")) < LONGUEST_EN_TOKEN)
       .groupBy("id")
       .agg(array_join(collect_list(col("token")), " ").as("text"))
-      .repartition(1000)
+      .repartition(500)
 
     val documenter = new DocumentAssembler().setInputCol("text").setOutputCol("document")
     val tokenizer = new Tokenizer().setInputCols(Array("document")).setOutputCol("token")

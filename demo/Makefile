@@ -47,6 +47,7 @@ _run-local:
 
 XML_DUMP=swift://wiki.OVH/enwiki-20190801-pages-articles-multistream2.xml-p30304p88444
 #XML_DUMP=swift://wiki.OVH/enwiki-20190801-pages-articles-multistream-500MB.xml
+XML_DUMP=swift://wiki.OVH/enwiki-20190801-pages-articles-multistream-128MB.xml
 
 _run:
 	$(MAKE) -C ../cluster start-mon

@@ -16,7 +16,6 @@ ls spark-${SPARK_VERSION} > /dev/null || tar zxfv spark-${SPARK_VERSION}.tgz
 # compile
 ls spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-standalone.tgz > /dev/null || \
 (cd spark-${SPARK_VERSION} && ./dev/make-distribution.sh --name standalone --tgz -Pscala-2.11 -DskipTests)
-
 # 'fetch' compiled version
 ls spark-${SPARK_VERSION}-bin-standalone.tgz > /dev/null || ln -sf spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-standalone.tgz .
 # extract

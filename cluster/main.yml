@@ -165,12 +165,12 @@
   - name: Generate log4j config
     template:
       src: "{{ playbook_dir }}/log4j.properties.j2"
-      dest: "/tmp/log4j.properties"
+      dest: "{{ playbook_dir }}/../spark/conf/log4j.properties"
 
   - name: Fetch Gelf lib for logging
     get_url:
       url: "{{ gelf_package }}"
-      dest: "/tmp/"
+      dest: "{{ playbook_dir }}/../spark/jars/"
 
   - name: Create model directories
     file:
