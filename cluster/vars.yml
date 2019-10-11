@@ -8,8 +8,10 @@ lemma_model_url: https://s3.amazonaws.com/auxdata.johnsnowlabs.com/public/models
 gelf_package: https://repo1.maven.org/maven2/biz/paluch/logging/logstash-gelf/1.13.0/logstash-gelf-1.13.0.jar
 
 # the OVH Metrics WRITE token
-write_token: "{{ lookup('env','METRICS_WRITE_TOKEN') }}"
+metrics_host: "{{ lookup('env','METRICS_HOST') }}"
+metrics_write_token: "{{ lookup('env','METRICS_WRITE_TOKEN') }}"
 # the OVH Logs Write token
-ldp_token: "{{ lookup('env','LDP_WRITE_TOKEN') }}"
+ldp_host: "{{ lookup('env','LDP_HOST') }}"
+ldp_write_token: "{{ lookup('env','LDP_WRITE_TOKEN') }}"
 
 log4j_level: INFO # default to INFO

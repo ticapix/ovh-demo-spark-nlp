@@ -22,10 +22,10 @@
       dest: /tmp/spark-key.pub
       mode: 0600
 
-
   - name: remove previous key from known host file
     command: ssh-keygen -f "{{ lookup('env','HOME') }}/.ssh/known_hosts" -R "{{ item }}"
     loop: "{{ inventory.workers.value + [inventory.master.value] }}"
+    ignore_errors: yes # it will fail if the computer has no .ssh/known_hosts file
 
   - name: add master node to inventory
     add_host:

@@ -8,8 +8,8 @@ scrapers:
 # Warp10 platform to send data
 sinks:
   metrics:
-    url: https://warp10.gra1.metrics.ovh.net/api/v0/update
-    token: {{ write_token }}
+    url: {{ metrics_host }}
+    token: {{ metrics_write_token }}
 
 labels:
   host: {{ ansible_hostname }}

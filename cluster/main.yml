@@ -59,7 +59,6 @@
       name: beamium
       state: restarted
 
-
 - name: deploy cluster
   hosts: all
   gather_facts: no
@@ -109,6 +108,11 @@
     get_url:
       url: "{{ gelf_package }}"
       dest: "{{ home }}/spark/jars/"
+
+- name: Configure models
+  hosts: workers localhost
+  gather_facts: no
+  tasks:
 
   - name: Create model directories
     file:
@@ -171,24 +175,3 @@
     get_url:
       url: "{{ gelf_package }}"
       dest: "{{ playbook_dir }}/../spark/jars/"
-
-  - name: Create model directories
-    file:
-      path: "{{ item }}"
-      state: directory
-      mode: '0755'
-    loop:
-      - "/tmp/pos_model"
-      - "/tmp/lemma_model"
-
-  - name: Extract {{ pos_model_url }} model
-    unarchive:
-      src: '{{ pos_model_url }}'
-      dest: "/tmp/pos_model"
-      remote_src: yes
-
-  - name: Extract {{ lemma_model_url }} model
-    unarchive:
-      src: '{{ lemma_model_url }}'
-      dest: "/tmp/lemma_model"
-      remote_src: yes
