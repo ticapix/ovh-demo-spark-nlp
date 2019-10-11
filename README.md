@@ -75,7 +75,11 @@ make -C demo assembly
 
 # TODO
 
-Upload the wikipedia dump in a swift container
+Fetch a small or full dump from https://dumps.wikimedia.org/enwiki/20190801/ and upload it ti your swift container
+
+```shell
+swift upload --use-slo --segment-size wiki 134217728 enwiki-20190801-pages-articles-multistream2.xml-p30304p88444.bz2
+```
 
 # Start the log analyser
 
