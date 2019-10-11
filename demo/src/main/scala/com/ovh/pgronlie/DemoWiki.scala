@@ -24,7 +24,7 @@ object DemoWiki {
   var pos_model_path: Path = Paths.get("")
   var lemma_model_path: Path = Paths.get("")
 
-  val SHORTEST_EN_PARAGRAPH = 500
+  val SHORTEST_EN_PARAGRAPH = 400
   val LONGUEST_EN_TOKEN = 15
 
   def extractVerb32(sc: SparkSession, df: DataFrame): DataFrame = {

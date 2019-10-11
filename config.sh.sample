@@ -19,9 +19,11 @@ export OS_PASSWORD="XXXX"
 export OS_REGION_NAME="GRA5"
 
 # OVH Metrics
-export METRICS_WRITE_TOKEN="XXX"
-export METRICS_READ_TOKEN="XXX"
+export METRICS_HOST='https://warp10.XXXX.metrics.ovh.net/api/v0/update'
+export METRICS_WRITE_TOKEN="XXXX"
+export METRICS_READ_TOKEN="XXXX"
 
 # OVH Logs
+export LDP_HOST='XXXX.logs.ovh.com'
 export LDP_WSS="wss://XXX.logs.ovh.com/tail/?tk=XXXX"
 export LDP_WRITE_TOKEN="XXXX"
