@@ -1,5 +1,8 @@
 # OVH Labs - Automated monitored Spark cluster deployment for NLP processing
 
+![main infra](archi.png)
+
+
 # Setup your VM
 
 ```shell
